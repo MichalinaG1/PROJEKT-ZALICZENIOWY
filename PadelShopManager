@@ -1,0 +1,1500 @@
+using System;
+using System.IO;
+
+namespace PadelShopManager
+{
+    public struct Racket
+    {
+        public int Id { get; set; }
+        public string Brand { get; set; }
+        public string Model { get; set; }
+        public decimal Price { get; set; }
+
+        public Racket(int id, string brand, string model, decimal price)
+        {
+            Id = id;
+            Brand = brand;
+            Model = model;
+            Price = price;
+        }
+
+        public override string ToString()
+        {
+            return $"ID: {Id}, Marka: {Brand}, Model: {Model}, Cena: {Price:C}";
+        }
+    }
+
+    public struct Ball
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
+
+        public Ball(int id, string name, decimal price)
+        {
+            Id = id;
+            Name = name;
+            Price = price;
+        }
+
+        public override string ToString()
+        {
+            return $"ID: {Id}, Nazwa: {Name}, Cena: {Price:C}";
+        }
+    }
+
+    public struct Shirt
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Size { get; set; }
+        public decimal Price { get; set; }
+
+        public Shirt(int id, string name, string size, decimal price)
+        {
+            Id = id;
+            Name = name;
+            Size = size;
+            Price = price;
+        }
+
+        public override string ToString()
+        {
+            return $"ID: {Id}, Nazwa: {Name}, Rozmiar: {Size}, Cena: {Price:C}";
+        }
+    }
+
+    public struct Shorts
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Size { get; set; }
+        public decimal Price { get; set; }
+
+        public Shorts(int id, string name, string size, decimal price)
+        {
+            Id = id;
+            Name = name;
+            Size = size;
+            Price = price;
+        }
+
+        public override string ToString()
+        {
+            return $"ID: {Id}, Nazwa: {Name}, Rozmiar: {Size}, Cena: {Price:C}";
+        }
+    }
+
+    public struct Shoes
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Size { get; set; }
+        public decimal Price { get; set; }
+
+        public Shoes(int id, string name, string size, decimal price)
+        {
+            Id = id;
+            Name = name;
+            Size = size;
+            Price = price;
+        }
+
+        public override string ToString()
+        {
+            return $"ID: {Id}, Nazwa: {Name}, Rozmiar: {Size}, Cena: {Price:C}";
+        }
+    }
+
+    class Program
+    {
+        private static string DATA_FILE = "rackets.txt";
+        private static Racket[] rackets = new Racket[100];
+        private static int racketsCount = 0;
+        
+        private static string BALLS_DATA_FILE = "balls.txt";
+        private static Ball[] balls = new Ball[100];
+        private static int ballsCount = 0;
+
+        private static string SHIRTS_DATA_FILE = "shirts.txt";
+        private static Shirt[] shirts = new Shirt[100];
+        private static int shirtsCount = 0;
+
+        private static string SHORTS_DATA_FILE = "shorts.txt";
+        private static Shorts[] shorts = new Shorts[100];
+        private static int shortsCount = 0;
+
+        private static string SHOES_DATA_FILE = "shoes.txt";
+        private static Shoes[] shoes = new Shoes[100];
+        private static int shoesCount = 0;
+
+        static void Main(string[] args)
+        {
+            LoadRackets();
+            LoadBalls();
+            LoadShirts();
+            LoadShorts();
+            LoadShoes();
+            ShowMainMenu();
+        }
+
+        static void ShowMainMenu()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("=== PADEL SHOP MANAGER ===");
+                Console.WriteLine();
+                Console.WriteLine("1. Rakiety");
+                Console.WriteLine("2. Pilki");
+                Console.WriteLine("3. Ubrania");
+                Console.WriteLine("4. Wyjście");
+                Console.WriteLine();
+                Console.Write("Wybierz opcję (1-4): ");
+
+                string? choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        ShowRacketsMenu();
+                        break;
+                    case "2":
+                        ShowBallsMenu();
+                        break;
+                    case "3":
+                        ShowUbraniaMenu();
+                        break;
+                    case "4":
+                        Console.WriteLine("Dziękujemy za korzystanie z Padel Shop Manager!");
+                        return;
+                    default:
+                        Console.WriteLine("Nieprawidłowy wybór! Naciśnij dowolny klawisz...");
+                        Console.ReadKey();
+                        break;
+                }
+            }
+        }
+
+        static void ShowRacketsMenu()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("=== ZARZĄDZANIE RAKIETAMI ===");
+                Console.WriteLine();
+                Console.WriteLine("1. Wyświetl wszystkie");
+                Console.WriteLine("2. Dodaj");
+                Console.WriteLine("3. Usuń");
+                Console.WriteLine("4. Cofnij");
+                Console.WriteLine();
+                Console.Write("Wybierz opcję (1-4): ");
+
+                string? choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        DisplayAllRackets();
+                        break;
+                    case "2":
+                        AddRacket();
+                        break;
+                    case "3":
+                        RemoveRacket();
+                        break;
+                    case "4":
+                        return;
+                    default:
+                        Console.WriteLine("Nieprawidłowy wybór! Naciśnij dowolny klawisz...");
+                        Console.ReadKey();
+                        break;
+                }
+            }
+        }
+
+        static void DisplayAllRackets()
+        {
+            Console.Clear();
+            Console.WriteLine("=== WSZYSTKIE RAKIETY ===");
+            Console.WriteLine();
+
+            if (racketsCount == 0)
+            {
+                Console.WriteLine("Brak rakiet w sklepie.");
+            }
+            else
+            {
+                Console.WriteLine($"Znaleziono {racketsCount} rakiet(y):");
+                Console.WriteLine();
+                
+                for (int i = 0; i < racketsCount; i++)
+                {
+                    Console.WriteLine($"  {rackets[i]}");
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Naciśnij dowolny klawisz, aby wrócić...");
+            Console.ReadKey();
+        }
+
+        static void AddRacket()
+        {
+            Console.Clear();
+            Console.WriteLine("=== DODAJ NOWĄ RAKIETĘ ===");
+            Console.WriteLine();
+
+            if (racketsCount >= 100)
+            {
+                Console.WriteLine("Osiągnięto maksymalną liczbę rakiet (100)!");
+                Console.ReadKey();
+                return;
+            }
+
+            int newId = GetNextId();
+
+            Console.Write("Podaj markę rakiety: ");
+            string? brand = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(brand))
+            {
+                Console.WriteLine("Marka nie może być pusta!");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.Write("Podaj model rakiety: ");
+            string? model = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(model))
+            {
+                Console.WriteLine("Model nie może być pusty!");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.Write("Podaj cenę (w PLN): ");
+            string? priceStr = Console.ReadLine();
+            
+            decimal price = Convert.ToDecimal(priceStr);
+            if (price < 0)
+            {
+                Console.WriteLine("Nieprawidłowa cena! Podaj liczbę większą lub równą 0.");
+                Console.ReadKey();
+                return;
+            }
+
+            Racket newRacket = new Racket(newId, brand, model, price);
+            rackets[racketsCount] = newRacket;
+            racketsCount++;
+
+            SaveRackets();
+
+            Console.WriteLine();
+            Console.WriteLine("Rakieta została dodana pomyślnie!");
+            Console.WriteLine($"Dodano: {newRacket}");
+            Console.WriteLine();
+            Console.WriteLine("Naciśnij dowolny klawisz, aby kontynuować...");
+            Console.ReadKey();
+        }
+
+        static void RemoveRacket()
+        {
+            Console.Clear();
+            Console.WriteLine("=== USUŃ RAKIETĘ ===");
+            Console.WriteLine();
+
+            if (racketsCount == 0)
+            {
+                Console.WriteLine("Brak rakiet do usunięcia.");
+                Console.WriteLine("Naciśnij dowolny klawisz, aby wrócić...");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.WriteLine("Dostępne rakiety:");
+            for (int i = 0; i < racketsCount; i++)
+            {
+                Console.WriteLine($"  {rackets[i]}");
+            }
+
+            Console.WriteLine();
+            Console.Write("Podaj ID rakiety do usunięcia: ");
+            string? idStr = Console.ReadLine();
+
+            int id = Convert.ToInt32(idStr);
+            
+            int indexToRemove = FindRacketIndexById(id);
+            
+            if (indexToRemove == -1)
+            {
+                Console.WriteLine($"Nie znaleziono rakiety o ID: {id}");
+            }
+            else
+            {
+                Console.WriteLine($"Czy na pewno chcesz usunąć rakietę: {rackets[indexToRemove]}?");
+                Console.Write("Wpisz 'tak' aby potwierdzić: ");
+                string? confirmation = Console.ReadLine();
+
+                if (confirmation?.ToLower() == "tak")
+                {
+                    RemoveRacketAtIndex(indexToRemove);
+                    SaveRackets();
+                    Console.WriteLine("Rakieta została usunięta pomyślnie!");
+                }
+                else
+                {
+                    Console.WriteLine("Anulowano usuwanie rakiety.");
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Naciśnij dowolny klawisz, aby kontynuować...");
+            Console.ReadKey();
+        }
+
+        static int GetNextId()
+        {
+            int maxId = 0;
+            for (int i = 0; i < racketsCount; i++)
+            {
+                if (rackets[i].Id > maxId)
+                {
+                    maxId = rackets[i].Id;
+                }
+            }
+            return maxId + 1;
+        }
+
+        static int FindRacketIndexById(int id)
+        {
+            for (int i = 0; i < racketsCount; i++)
+            {
+                if (rackets[i].Id == id)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        static void RemoveRacketAtIndex(int index)
+        {
+            for (int i = index; i < racketsCount - 1; i++)
+            {
+                rackets[i] = rackets[i + 1];
+            }
+            racketsCount--;
+        }
+
+        static void LoadRackets()
+        {
+            if (File.Exists(DATA_FILE))
+            { 
+                FileStream file = new FileStream(DATA_FILE, FileMode.Open, FileAccess.Read);
+                StreamReader reader = new StreamReader(file);
+                
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (racketsCount >= 100)
+                        break;
+                        
+                    if (!string.IsNullOrWhiteSpace(line))
+                    {
+                        string[] parts = line.Split(',');
+                        if (parts.Length == 4)
+                        {
+                            int id = Convert.ToInt32(parts[0]);
+                            decimal price = Convert.ToDecimal(parts[3]);
+                            
+                            Racket racket = new Racket(id, parts[1], parts[2], price);
+                            rackets[racketsCount] = racket;
+                            racketsCount++;
+                        }
+                    }
+                }
+                
+                reader.Close();
+                file.Close();
+            }
+        }
+
+        static void SaveRackets()
+        {
+            FileStream file = new FileStream(DATA_FILE, FileMode.Create, FileAccess.Write);
+            StreamWriter writer = new StreamWriter(file);
+            
+            for (int i = 0; i < racketsCount; i++)
+            {
+                string line = $"{rackets[i].Id},{rackets[i].Brand},{rackets[i].Model},{rackets[i].Price}";
+                writer.WriteLine(line);
+            }
+            
+            writer.Close();
+            file.Close();
+        }
+
+        static void LoadBalls()
+        {
+            if (File.Exists(BALLS_DATA_FILE))
+            { 
+                FileStream file = new FileStream(BALLS_DATA_FILE, FileMode.Open, FileAccess.Read);
+                StreamReader reader = new StreamReader(file);
+                
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (ballsCount >= 100)
+                        break;
+                        
+                    if (!string.IsNullOrWhiteSpace(line))
+                    {
+                        string[] parts = line.Split(',');
+                        if (parts.Length == 3)
+                        {
+                            int id = Convert.ToInt32(parts[0]);
+                            decimal price = Convert.ToDecimal(parts[2]);
+                            
+                            Ball ball = new Ball(id, parts[1], price);
+                            balls[ballsCount] = ball;
+                            ballsCount++;
+                        }
+                    }
+                }
+                
+                reader.Close();
+                file.Close();
+            }
+        }
+
+        static void ShowBallsMenu()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("=== ZARZADZANIE PILKAMI ===");
+                Console.WriteLine();
+                Console.WriteLine("1. Wyświetl wszystkie");
+                Console.WriteLine("2. Dodaj");
+                Console.WriteLine("3. Usuń");
+                Console.WriteLine("4. Cofnij");
+                Console.WriteLine();
+                Console.Write("Wybierz opcję (1-4): ");
+
+                string? choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        DisplayAllBalls();
+                        break;
+                    case "2":
+                        AddBall();
+                        break;
+                    case "3":
+                        RemoveBall();
+                        break;
+                    case "4":
+                        return;
+                    default:
+                        Console.WriteLine("Nieprawidłowy wybór! Naciśnij dowolny klawisz...");
+                        Console.ReadKey();
+                        break;
+                }
+            }
+        }
+
+        static void DisplayAllBalls()
+        {
+            Console.Clear();
+            Console.WriteLine("=== WSZYSTKIE PILKI ===");
+            Console.WriteLine();
+
+            if (ballsCount == 0)
+            {
+                Console.WriteLine("Brak piłek w sklepie.");
+            }
+            else
+            {
+                Console.WriteLine($"Znaleziono {ballsCount} piłka(y):");
+                Console.WriteLine();
+                
+                for (int i = 0; i < ballsCount; i++)
+                {
+                    Console.WriteLine($"  {balls[i]}");
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Naciśnij dowolny klawisz, aby wrócić...");
+            Console.ReadKey();
+        }
+
+        static void AddBall()
+        {
+            Console.Clear();
+            Console.WriteLine("=== DODAJ NOWĄ PIŁKĘ ===");
+            Console.WriteLine();
+
+            if (ballsCount >= 100)
+            {
+                Console.WriteLine("Osiągnięto maksymalną liczbę piłek (100)!");
+                Console.ReadKey();
+                return;
+            }
+
+            int newId = GetNextBallId();
+
+            Console.Write("Wprowadź nazwę piłki: ");
+            string? name = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Console.WriteLine("Nazwa nie może być pusta!");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.Write("Wprowadź cenę (w PLN): ");
+            string? priceStr = Console.ReadLine();
+            
+            decimal price = Convert.ToDecimal(priceStr);
+            if (price < 0)
+            {
+                Console.WriteLine("Nieprawidłowa cena! Wprowadź liczbę większą lub równą 0.");
+                Console.ReadKey();
+                return;
+            }
+
+            Ball newBall = new Ball(newId, name, price);
+            balls[ballsCount] = newBall;
+            ballsCount++;
+
+            SaveBalls();
+
+            Console.WriteLine();
+            Console.WriteLine("Piłka została dodana pomyślnie!");
+            Console.WriteLine($"Dodano: {newBall}");
+            Console.WriteLine();
+            Console.WriteLine("Naciśnij dowolny klawisz, aby kontynuować...");
+            Console.ReadKey();
+        }
+
+        static void RemoveBall()
+        {
+            Console.Clear();
+            Console.WriteLine("=== USUŃ PIŁKĘ ===");
+            Console.WriteLine();
+
+            if (ballsCount == 0)
+            {
+                Console.WriteLine("Brak piłek do usunięcia.");
+                Console.WriteLine("Naciśnij dowolny klawisz, aby wrócić...");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.WriteLine("Dostępne piłki:");
+            for (int i = 0; i < ballsCount; i++)
+            {
+                Console.WriteLine($"  {balls[i]}");
+            }
+
+            Console.WriteLine();
+            Console.Write("Wprowadź ID piłki do usunięcia: ");
+            string? idStr = Console.ReadLine();
+
+            int id = Convert.ToInt32(idStr);
+            
+            int indexToRemove = FindBallIndexById(id);
+            
+            if (indexToRemove == -1)
+            {
+                Console.WriteLine($"Piłka o ID {id} nie znaleziona");
+            }
+            else
+            {
+                Console.WriteLine($"Czy na pewno chcesz usunąć piłkę: {balls[indexToRemove]}?");
+                Console.Write("Wpisz 'tak' aby potwierdzić: ");
+                string? confirmation = Console.ReadLine();
+
+                if (confirmation?.ToLower() == "tak")
+                {
+                    RemoveBallAtIndex(indexToRemove);
+                    SaveBalls();
+                    Console.WriteLine("Piłka została usunięta pomyślnie!");
+                }
+                else
+                {
+                    Console.WriteLine("Usunięcie piłki anulowane.");
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Naciśnij dowolny klawisz, aby kontynuować...");
+            Console.ReadKey();
+        }
+
+        static int GetNextBallId()
+        {
+            int maxId = 0;
+            for (int i = 0; i < ballsCount; i++)
+            {
+                if (balls[i].Id > maxId)
+                {
+                    maxId = balls[i].Id;
+                }
+            }
+            return maxId + 1;
+        }
+
+        static int FindBallIndexById(int id)
+        {
+            for (int i = 0; i < ballsCount; i++)
+            {
+                if (balls[i].Id == id)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        static void RemoveBallAtIndex(int index)
+        {
+            for (int i = index; i < ballsCount - 1; i++)
+            {
+                balls[i] = balls[i + 1];
+            }
+            ballsCount--;
+        }
+
+        static void SaveBalls()
+        {
+            FileStream file = new FileStream(BALLS_DATA_FILE, FileMode.Create, FileAccess.Write);
+            StreamWriter writer = new StreamWriter(file);
+            
+            for (int i = 0; i < ballsCount; i++)
+            {
+                string line = $"{balls[i].Id},{balls[i].Name},{balls[i].Price}";
+                writer.WriteLine(line);
+            }
+            
+            writer.Close();
+            file.Close();
+        }
+
+        static void ShowUbraniaMenu()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("=== ZARZĄDZANIE UBRANIAMI ===");
+                Console.WriteLine();
+                Console.WriteLine("1. Koszulki");
+                Console.WriteLine("2. Spodenki");
+                Console.WriteLine("3. Buty");
+                Console.WriteLine("4. Cofnij");
+                Console.WriteLine();
+                Console.Write("Wybierz opcję (1-4): ");
+
+                string? choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        ShowShirtsMenu();
+                        break;
+                    case "2":
+                        ShowShortsMenu();
+                        break;
+                    case "3":
+                        ShowShoesMenu();
+                        break;
+                    case "4":
+                        return;
+                    default:
+                        Console.WriteLine("Nieprawidłowy wybór! Naciśnij dowolny klawisz...");
+                        Console.ReadKey();
+                        break;
+                }
+            }
+        }
+
+        static void LoadShirts()
+        {
+            if (File.Exists(SHIRTS_DATA_FILE))
+            { 
+                FileStream file = new FileStream(SHIRTS_DATA_FILE, FileMode.Open, FileAccess.Read);
+                StreamReader reader = new StreamReader(file);
+                
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (shirtsCount >= 100)
+                        break;
+                        
+                    if (!string.IsNullOrWhiteSpace(line))
+                    {
+                        string[] parts = line.Split(',');
+                        if (parts.Length == 4)
+                        {
+                            int id = Convert.ToInt32(parts[0]);
+                            decimal price = Convert.ToDecimal(parts[3]);
+                            
+                            Shirt shirt = new Shirt(id, parts[1], parts[2], price);
+                            shirts[shirtsCount] = shirt;
+                            shirtsCount++;
+                        }
+                    }
+                }
+                
+                reader.Close();
+                file.Close();
+            }
+        }
+
+        static void LoadShorts()
+        {
+            if (File.Exists(SHORTS_DATA_FILE))
+            { 
+                FileStream file = new FileStream(SHORTS_DATA_FILE, FileMode.Open, FileAccess.Read);
+                StreamReader reader = new StreamReader(file);
+                
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (shortsCount >= 100)
+                        break;
+                        
+                    if (!string.IsNullOrWhiteSpace(line))
+                    {
+                        string[] parts = line.Split(',');
+                        if (parts.Length == 4)
+                        {
+                            int id = Convert.ToInt32(parts[0]);
+                            decimal price = Convert.ToDecimal(parts[3]);
+                            
+                            Shorts shortsItem = new Shorts(id, parts[1], parts[2], price);
+                            shorts[shortsCount] = shortsItem;
+                            shortsCount++;
+                        }
+                    }
+                }
+                
+                reader.Close();
+                file.Close();
+            }
+        }
+
+        static void LoadShoes()
+        {
+            if (File.Exists(SHOES_DATA_FILE))
+            { 
+                FileStream file = new FileStream(SHOES_DATA_FILE, FileMode.Open, FileAccess.Read);
+                StreamReader reader = new StreamReader(file);
+                
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    if (shoesCount >= 100)
+                        break;
+                        
+                    if (!string.IsNullOrWhiteSpace(line))
+                    {
+                        string[] parts = line.Split(',');
+                        if (parts.Length == 4)
+                        {
+                            int id = Convert.ToInt32(parts[0]);
+                            decimal price = Convert.ToDecimal(parts[3]);
+                            
+                            Shoes shoe = new Shoes(id, parts[1], parts[2], price);
+                            shoes[shoesCount] = shoe;
+                            shoesCount++;
+                        }
+                    }
+                }
+                
+                reader.Close();
+                file.Close();
+            }
+        }
+
+        static void ShowShirtsMenu()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("=== ZARZĄDZANIE KOSZULKAMI ===");
+                Console.WriteLine();
+                Console.WriteLine("1. Wyświetl wszystkie");
+                Console.WriteLine("2. Dodaj");
+                Console.WriteLine("3. Usuń");
+                Console.WriteLine("4. Cofnij");
+                Console.WriteLine();
+                Console.Write("Wybierz opcję (1-4): ");
+
+                string? choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        DisplayAllShirts();
+                        break;
+                    case "2":
+                        AddShirt();
+                        break;
+                    case "3":
+                        RemoveShirt();
+                        break;
+                    case "4":
+                        return;
+                    default:
+                        Console.WriteLine("Nieprawidłowy wybór! Naciśnij dowolny klawisz...");
+                        Console.ReadKey();
+                        break;
+                }
+            }
+        }
+
+        static void ShowShortsMenu()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("=== ZARZĄDZANIE SPODENKAMI ===");
+                Console.WriteLine();
+                Console.WriteLine("1. Wyświetl wszystkie");
+                Console.WriteLine("2. Dodaj");
+                Console.WriteLine("3. Usuń");
+                Console.WriteLine("4. Cofnij");
+                Console.WriteLine();
+                Console.Write("Wybierz opcję (1-4): ");
+
+                string? choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        DisplayAllShorts();
+                        break;
+                    case "2":
+                        AddShorts();
+                        break;
+                    case "3":
+                        RemoveShorts();
+                        break;
+                    case "4":
+                        return;
+                    default:
+                        Console.WriteLine("Nieprawidłowy wybór! Naciśnij dowolny klawisz...");
+                        Console.ReadKey();
+                        break;
+                }
+            }
+        }
+
+        static void ShowShoesMenu()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("=== ZARZĄDZANIE BUTAMI ===");
+                Console.WriteLine();
+                Console.WriteLine("1. Wyświetl wszystkie");
+                Console.WriteLine("2. Dodaj");
+                Console.WriteLine("3. Usuń");
+                Console.WriteLine("4. Cofnij");
+                Console.WriteLine();
+                Console.Write("Wybierz opcję (1-4): ");
+
+                string? choice = Console.ReadLine();
+
+                switch (choice)
+                {
+                    case "1":
+                        DisplayAllShoes();
+                        break;
+                    case "2":
+                        AddShoes();
+                        break;
+                    case "3":
+                        RemoveShoes();
+                        break;
+                    case "4":
+                        return;
+                    default:
+                        Console.WriteLine("Nieprawidłowy wybór! Naciśnij dowolny klawisz...");
+                        Console.ReadKey();
+                        break;
+                }
+            }
+        }
+
+        // Koszulki CRUD methods
+        static void DisplayAllShirts()
+        {
+            Console.Clear();
+            Console.WriteLine("=== WSZYSTKIE KOSZULKI ===");
+            Console.WriteLine();
+
+            if (shirtsCount == 0)
+            {
+                Console.WriteLine("Brak koszulek w sklepie.");
+            }
+            else
+            {
+                Console.WriteLine($"Znaleziono {shirtsCount} koszulka(i):");
+                Console.WriteLine();
+                
+                for (int i = 0; i < shirtsCount; i++)
+                {
+                    Console.WriteLine($"  {shirts[i]}");
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Naciśnij dowolny klawisz, aby wrócić...");
+            Console.ReadKey();
+        }
+
+        static void AddShirt()
+        {
+            Console.Clear();
+            Console.WriteLine("=== DODAJ NOWĄ KOSZULKĘ ===");
+            Console.WriteLine();
+
+            if (shirtsCount >= 100)
+            {
+                Console.WriteLine("Osiągnięto maksymalną liczbę koszulek (100)!");
+                Console.ReadKey();
+                return;
+            }
+
+            int newId = GetNextShirtId();
+
+            Console.Write("Wprowadź nazwę koszulki: ");
+            string? name = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Console.WriteLine("Nazwa nie może być pusta!");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.Write("Wprowadź rozmiar: ");
+            string? size = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(size))
+            {
+                Console.WriteLine("Rozmiar nie może być pusty!");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.Write("Wprowadź cenę (w PLN): ");
+            string? priceStr = Console.ReadLine();
+            
+            decimal price = Convert.ToDecimal(priceStr);
+            if (price < 0)
+            {
+                Console.WriteLine("Nieprawidłowa cena! Wprowadź liczbę większą lub równą 0.");
+                Console.ReadKey();
+                return;
+            }
+
+            Shirt newShirt = new Shirt(newId, name, size, price);
+            shirts[shirtsCount] = newShirt;
+            shirtsCount++;
+
+            SaveShirts();
+
+            Console.WriteLine();
+            Console.WriteLine("Koszulka została dodana pomyślnie!");
+            Console.WriteLine($"Dodano: {newShirt}");
+            Console.WriteLine();
+            Console.WriteLine("Naciśnij dowolny klawisz, aby kontynuować...");
+            Console.ReadKey();
+        }
+
+        static void RemoveShirt()
+        {
+            Console.Clear();
+            Console.WriteLine("=== USUŃ KOSZULKĘ ===");
+            Console.WriteLine();
+
+            if (shirtsCount == 0)
+            {
+                Console.WriteLine("Brak koszulek do usunięcia.");
+                Console.WriteLine("Naciśnij dowolny klawisz, aby wrócić...");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.WriteLine("Dostępne koszulki:");
+            for (int i = 0; i < shirtsCount; i++)
+            {
+                Console.WriteLine($"  {shirts[i]}");
+            }
+
+            Console.WriteLine();
+            Console.Write("Wprowadź ID koszulki do usunięcia: ");
+            string? idStr = Console.ReadLine();
+
+            int id = Convert.ToInt32(idStr);
+            
+            int indexToRemove = FindShirtIndexById(id);
+            
+            if (indexToRemove == -1)
+            {
+                Console.WriteLine($"Koszulka o ID {id} nie znaleziona");
+            }
+            else
+            {
+                Console.WriteLine($"Czy na pewno chcesz usunąć koszulkę: {shirts[indexToRemove]}?");
+                Console.Write("Wpisz 'tak' aby potwierdzić: ");
+                string? confirmation = Console.ReadLine();
+
+                if (confirmation?.ToLower() == "tak")
+                {
+                    RemoveShirtAtIndex(indexToRemove);
+                    SaveShirts();
+                    Console.WriteLine("Koszulka została usunięta pomyślnie!");
+                }
+                else
+                {
+                    Console.WriteLine("Usunięcie koszulki anulowane.");
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Naciśnij dowolny klawisz, aby kontynuować...");
+            Console.ReadKey();
+        }
+
+        // Spodenki CRUD methods
+        static void DisplayAllShorts()
+        {
+            Console.Clear();
+            Console.WriteLine("=== WSZYSTKIE SPODENKI ===");
+            Console.WriteLine();
+
+            if (shortsCount == 0)
+            {
+                Console.WriteLine("Brak spodenków w sklepie.");
+            }
+            else
+            {
+                Console.WriteLine($"Znaleziono {shortsCount} spodenki:");
+                Console.WriteLine();
+                
+                for (int i = 0; i < shortsCount; i++)
+                {
+                    Console.WriteLine($"  {shorts[i]}");
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Naciśnij dowolny klawisz, aby wrócić...");
+            Console.ReadKey();
+        }
+
+        static void AddShorts()
+        {
+            Console.Clear();
+            Console.WriteLine("=== DODAJ NOWE SPODENKI ===");
+            Console.WriteLine();
+
+            if (shortsCount >= 100)
+            {
+                Console.WriteLine("Osiągnięto maksymalną liczbę spodenków (100)!");
+                Console.ReadKey();
+                return;
+            }
+
+            int newId = GetNextShortsId();
+
+            Console.Write("Wprowadź nazwę spodenków: ");
+            string? name = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Console.WriteLine("Nazwa nie może być pusta!");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.Write("Wprowadź rozmiar: ");
+            string? size = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(size))
+            {
+                Console.WriteLine("Rozmiar nie może być pusty!");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.Write("Wprowadź cenę (w PLN): ");
+            string? priceStr = Console.ReadLine();
+            
+            decimal price = Convert.ToDecimal(priceStr);
+            if (price < 0)
+            {
+                Console.WriteLine("Nieprawidłowa cena! Wprowadź liczbę większą lub równą 0.");
+                Console.ReadKey();
+                return;
+            }
+
+            Shorts newShorts = new Shorts(newId, name, size, price);
+            shorts[shortsCount] = newShorts;
+            shortsCount++;
+
+            SaveShorts();
+
+            Console.WriteLine();
+            Console.WriteLine("Spodenki zostały dodane pomyślnie!");
+            Console.WriteLine($"Dodano: {newShorts}");
+            Console.WriteLine();
+            Console.WriteLine("Naciśnij dowolny klawisz, aby kontynuować...");
+            Console.ReadKey();
+        }
+
+        static void RemoveShorts()
+        {
+            Console.Clear();
+            Console.WriteLine("=== USUŃ SPODENKI ===");
+            Console.WriteLine();
+
+            if (shortsCount == 0)
+            {
+                Console.WriteLine("Brak spodenków do usunięcia.");
+                Console.WriteLine("Naciśnij dowolny klawisz, aby wrócić...");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.WriteLine("Dostępne spodenki:");
+            for (int i = 0; i < shortsCount; i++)
+            {
+                Console.WriteLine($"  {shorts[i]}");
+            }
+
+            Console.WriteLine();
+            Console.Write("Wprowadź ID spodenków do usunięcia: ");
+            string? idStr = Console.ReadLine();
+
+            int id = Convert.ToInt32(idStr);
+            
+            int indexToRemove = FindShortsIndexById(id);
+            
+            if (indexToRemove == -1)
+            {
+                Console.WriteLine($"Spodenki o ID {id} nie znalezione");
+            }
+            else
+            {
+                Console.WriteLine($"Czy na pewno chcesz usunąć spodenki: {shorts[indexToRemove]}?");
+                Console.Write("Wpisz 'tak' aby potwierdzić: ");
+                string? confirmation = Console.ReadLine();
+
+                if (confirmation?.ToLower() == "tak")
+                {
+                    RemoveShortsAtIndex(indexToRemove);
+                    SaveShorts();
+                    Console.WriteLine("Spodenki zostały usunięte pomyślnie!");
+                }
+                else
+                {
+                    Console.WriteLine("Usunięcie spodenków anulowane.");
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Naciśnij dowolny klawisz, aby kontynuować...");
+            Console.ReadKey();
+        }
+
+        // Shoes CRUD methods
+        static void DisplayAllShoes()
+        {
+            Console.Clear();
+            Console.WriteLine("=== WSZYSTKIE BUTY ===");
+            Console.WriteLine();
+
+            if (shoesCount == 0)
+            {
+                Console.WriteLine("Brak butów w sklepie.");
+            }
+            else
+            {
+                Console.WriteLine($"Znaleziono {shoesCount} para(y) butów:");
+                Console.WriteLine();
+                
+                for (int i = 0; i < shoesCount; i++)
+                {
+                    Console.WriteLine($"  {shoes[i]}");
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Naciśnij dowolny klawisz, aby wrócić...");
+            Console.ReadKey();
+        }
+
+        static void AddShoes()
+        {
+            Console.Clear();
+            Console.WriteLine("=== DODAJ NOWE BUTY ===");
+            Console.WriteLine();
+
+            if (shoesCount >= 100)
+            {
+                Console.WriteLine("Osiągnięto maksymalną liczbę butów (100)!");
+                Console.ReadKey();
+                return;
+            }
+
+            int newId = GetNextShoesId();
+
+            Console.Write("Wprowadź nazwę butów: ");
+            string? name = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                Console.WriteLine("Nazwa nie może być pusta!");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.Write("Wprowadź rozmiar: ");
+            string? size = Console.ReadLine();
+            if (string.IsNullOrWhiteSpace(size))
+            {
+                Console.WriteLine("Rozmiar nie może być pusty!");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.Write("Wprowadź cenę (w PLN): ");
+            string? priceStr = Console.ReadLine();
+            
+            decimal price = Convert.ToDecimal(priceStr);
+            if (price < 0)
+            {
+                Console.WriteLine("Nieprawidłowa cena! Wprowadź liczbę większą lub równą 0.");
+                Console.ReadKey();
+                return;
+            }
+
+            Shoes newShoes = new Shoes(newId, name, size, price);
+            shoes[shoesCount] = newShoes;
+            shoesCount++;
+
+            SaveShoes();
+
+            Console.WriteLine();
+            Console.WriteLine("Buty zostały dodane pomyślnie!");
+            Console.WriteLine($"Dodano: {newShoes}");
+            Console.WriteLine();
+            Console.WriteLine("Naciśnij dowolny klawisz, aby kontynuować...");
+            Console.ReadKey();
+        }
+
+        static void RemoveShoes()
+        {
+            Console.Clear();
+            Console.WriteLine("=== USUŃ BUTY ===");
+            Console.WriteLine();
+
+            if (shoesCount == 0)
+            {
+                Console.WriteLine("Brak butów do usunięcia.");
+                Console.WriteLine("Naciśnij dowolny klawisz, aby wrócić...");
+                Console.ReadKey();
+                return;
+            }
+
+            Console.WriteLine("Dostępne buty:");
+            for (int i = 0; i < shoesCount; i++)
+            {
+                Console.WriteLine($"  {shoes[i]}");
+            }
+
+            Console.WriteLine();
+            Console.Write("Wprowadź ID butów do usunięcia: ");
+            string? idStr = Console.ReadLine();
+
+            int id = Convert.ToInt32(idStr);
+            
+            int indexToRemove = FindShoesIndexById(id);
+            
+            if (indexToRemove == -1)
+            {
+                Console.WriteLine($"Buty o ID {id} nie znalezione");
+            }
+            else
+            {
+                Console.WriteLine($"Czy na pewno chcesz usunąć buty: {shoes[indexToRemove]}?");
+                Console.Write("Wpisz 'tak' aby potwierdzić: ");
+                string? confirmation = Console.ReadLine();
+
+                if (confirmation?.ToLower() == "tak")
+                {
+                    RemoveShoesAtIndex(indexToRemove);
+                    SaveShoes();
+                    Console.WriteLine("Buty zostały usunięte pomyślnie!");
+                }
+                else
+                {
+                    Console.WriteLine("Usunięcie butów anulowane.");
+                }
+            }
+
+            Console.WriteLine();
+            Console.WriteLine("Naciśnij dowolny klawisz, aby kontynuować...");
+            Console.ReadKey();
+        }
+
+        static int GetNextShirtId()
+        {
+            int maxId = 0;
+            for (int i = 0; i < shirtsCount; i++)
+            {
+                if (shirts[i].Id > maxId)
+                {
+                    maxId = shirts[i].Id;
+                }
+            }
+            return maxId + 1;
+        }
+
+        static int FindShirtIndexById(int id)
+        {
+            for (int i = 0; i < shirtsCount; i++)
+            {
+                if (shirts[i].Id == id)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        static void RemoveShirtAtIndex(int index)
+        {
+            for (int i = index; i < shirtsCount - 1; i++)
+            {
+                shirts[i] = shirts[i + 1];
+            }
+            shirtsCount--;
+        }
+
+        static void SaveShirts()
+        {
+            FileStream file = new FileStream(SHIRTS_DATA_FILE, FileMode.Create, FileAccess.Write);
+            StreamWriter writer = new StreamWriter(file);
+            
+            for (int i = 0; i < shirtsCount; i++)
+            {
+                string line = $"{shirts[i].Id},{shirts[i].Name},{shirts[i].Size},{shirts[i].Price}";
+                writer.WriteLine(line);
+            }
+            
+            writer.Close();
+            file.Close();
+        }
+
+        static int GetNextShortsId()
+        {
+            int maxId = 0;
+            for (int i = 0; i < shortsCount; i++)
+            {
+                if (shorts[i].Id > maxId)
+                {
+                    maxId = shorts[i].Id;
+                }
+            }
+            return maxId + 1;
+        }
+
+        static int FindShortsIndexById(int id)
+        {
+            for (int i = 0; i < shortsCount; i++)
+            {
+                if (shorts[i].Id == id)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        static void RemoveShortsAtIndex(int index)
+        {
+            for (int i = index; i < shortsCount - 1; i++)
+            {
+                shorts[i] = shorts[i + 1];
+            }
+            shortsCount--;
+        }
+
+        static void SaveShorts()
+        {
+            FileStream file = new FileStream(SHORTS_DATA_FILE, FileMode.Create, FileAccess.Write);
+            StreamWriter writer = new StreamWriter(file);
+            
+            for (int i = 0; i < shortsCount; i++)
+            {
+                string line = $"{shorts[i].Id},{shorts[i].Name},{shorts[i].Size},{shorts[i].Price}";
+                writer.WriteLine(line);
+            }
+            
+            writer.Close();
+            file.Close();
+        }
+
+        static int GetNextShoesId()
+        {
+            int maxId = 0;
+            for (int i = 0; i < shoesCount; i++)
+            {
+                if (shoes[i].Id > maxId)
+                {
+                    maxId = shoes[i].Id;
+                }
+            }
+            return maxId + 1;
+        }
+
+        static int FindShoesIndexById(int id)
+        {
+            for (int i = 0; i < shoesCount; i++)
+            {
+                if (shoes[i].Id == id)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        static void RemoveShoesAtIndex(int index)
+        {
+            for (int i = index; i < shoesCount - 1; i++)
+            {
+                shoes[i] = shoes[i + 1];
+            }
+            shoesCount--;
+        }
+
+        static void SaveShoes()
+        {
+            FileStream file = new FileStream(SHOES_DATA_FILE, FileMode.Create, FileAccess.Write);
+            StreamWriter writer = new StreamWriter(file);
+            
+            for (int i = 0; i < shoesCount; i++)
+            {
+                string line = $"{shoes[i].Id},{shoes[i].Name},{shoes[i].Size},{shoes[i].Price}";
+                writer.WriteLine(line);
+            }
+            
+            writer.Close();
+            file.Close();
+        }
+    }
+}
